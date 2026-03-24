@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fortnite Optimizer</title>
+  <meta name="description" content="Fortnite Optimizer helps you clean up background clutter, apply useful tweaks, and get into the game faster with less hassle." />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg2: #091122;
+      --card: rgba(255,255,255,0.08);
+      --card-strong: rgba(255,255,255,0.11);
+      --border: rgba(255,255,255,0.14);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.72);
+      --soft: rgba(255,255,255,0.52);
+      --accent: #7ae8ff;
+      --accent2: #6aa1ff;
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --shadow: 0 20px 70px rgba(0,0,0,0.30);
+      --max: 1200px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.10), transparent 22%),
+        linear-gradient(180deg, #050816 0%, #08101f 58%, #060a15 100%);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    .orbs,.grid,.noise { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .orbs::before,.orbs::after {
+      content: ""; position: absolute; border-radius: 999px; filter: blur(90px); animation: float 12s ease-in-out infinite;
+    }
+    .orbs::before { width: 480px; height: 480px; left: -110px; top: -120px; background: rgba(91, 220, 255, 0.18); }
+    .orbs::after { width: 420px; height: 420px; right: -90px; top: 140px; background: rgba(106, 161, 255, 0.16); animation-delay: -4s; }
+    .grid {
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 42px 42px; mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 82%); opacity: 0.34;
+    }
+    .noise { opacity: 0.04; background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 14px 14px; }
+    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; position: relative; z-index: 1; padding: 24px 0 90px; }
+    .glass {
+      background: rgba(255,255,255,0.08); border: 1px solid var(--border); box-shadow: var(--shadow); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+    }
+    .glass-strong {
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.07)); border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.34); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+    }
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 14px 18px; border-radius: 999px; position: sticky; top: 14px; z-index: 20; margin-bottom: 36px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .brand img { width: 164px; max-width: 32vw; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 24px; color: rgba(255,255,255,0.72); font-size: 14px; }
+    .nav-links a:hover { color: white; }
+    .btn,.btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 22px; border-radius: 999px;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease; font-weight: 700; border: 1px solid transparent; white-space: nowrap;
+    }
+    .btn:hover,.btn-ghost:hover { transform: translateY(-1px); }
+    .btn { background: white; color: #07111f; box-shadow: 0 12px 30px rgba(255,255,255,0.12); }
+    .btn-ghost { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.16); color: white; }
+    .reveal { opacity: 0; transform: translateY(18px); animation: reveal .85s ease forwards; }
+    .delay-1 { animation-delay: .08s; } .delay-2 { animation-delay: .18s; } .delay-3 { animation-delay: .28s; } .delay-4 { animation-delay: .38s; }
+    .hero { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 24px; align-items: center; }
+    .card,.feature-card,.screenshot-card,.pricing-card,.faq-card,.footer-cta { border-radius: var(--radius-xl); padding: 30px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px; padding: 10px 15px; border-radius: 999px; background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(122,232,255,0.20); color: rgba(223,249,255,0.96); font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    .eyebrow .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 14px rgba(122,232,255,0.9); }
+    .hero h1 { margin-top: 18px; font-size: clamp(42px, 6vw, 78px); line-height: 0.98; letter-spacing: -0.055em; max-width: 10ch; }
+    .lead { margin-top: 18px; color: var(--muted); line-height: 1.85; font-size: 18px; max-width: 700px; }
+    .hero-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+    .trust-row { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; color: rgba(255,255,255,0.58); font-size: 13px; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+    .stat { padding: 18px; border-radius: 22px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); }
+    .stat strong { display: block; font-size: clamp(24px, 3vw, 30px); }
+    .stat span { display: block; margin-top: 6px; font-size: 13px; color: rgba(255,255,255,0.55); }
+    .preview-shell { position: relative; }
+    .preview-main { padding: 20px; border-radius: 34px; }
+    .preview-window { border-radius: 28px; overflow: hidden; background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.07)); border: 1px solid rgba(255,255,255,0.14); }
+    .preview-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); }
+    .preview-top strong { font-size: 14px; }
+    .preview-top span { display: block; margin-top: 4px; font-size: 12px; color: rgba(255,255,255,0.48); }
+    .status-pill { padding: 7px 12px; border-radius: 999px; font-size: 12px; color: rgba(213,255,235,0.96); background: rgba(61,226,157,0.12); border: 1px solid rgba(162,245,211,0.16); }
+    .preview-image-wrap { padding: 14px; background: rgba(0,0,0,0.18); }
+    .preview-image { border-radius: 22px; border: 1px solid rgba(255,255,255,0.10); overflow: hidden; background: #02050d; box-shadow: 0 10px 35px rgba(0,0,0,0.35); }
+    .preview-image img { width: 100%; height: auto; object-fit: cover; }
+    section { margin-top: 60px; }
+    .section-head p { font-size: 12px; text-transform: uppercase; letter-spacing: 0.24em; color: rgba(255,255,255,0.46); }
+    .section-head h2 { margin-top: 10px; font-size: clamp(30px, 4vw, 44px); line-height: 1.04; letter-spacing: -0.045em; max-width: 13ch; }
+    .section-head .sub { margin-top: 14px; max-width: 760px; color: rgba(255,255,255,0.66); line-height: 1.8; font-size: 16px; }
+    .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 22px; }
+    .feature-card { padding: 22px; }
+    .icon-box { width: 52px; height: 52px; border-radius: 18px; margin-bottom: 14px; background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.07)); border: 1px solid rgba(255,255,255,0.14); box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); }
+    .feature-card h3 { font-size: 20px; margin-bottom: 10px; }
+    .feature-card p { color: rgba(255,255,255,0.64); line-height: 1.75; font-size: 15px; }
+    .split { display: grid; grid-template-columns: 1fr 0.95fr; gap: 18px; align-items: stretch; }
+    .copy-card { border-radius: var(--radius-xl); padding: 30px; }
+    .points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
+    .point { padding: 16px; border-radius: 20px; background: rgba(0,0,0,0.16); border: 1px solid rgba(255,255,255,0.10); color: rgba(255,255,255,0.76); font-size: 14px; }
+    .pricing-card h2 { margin-top: 10px; font-size: clamp(30px, 4vw, 40px); letter-spacing: -0.04em; }
+    .price { margin-top: 24px; font-size: clamp(52px, 6vw, 70px); font-weight: 800; letter-spacing: -0.05em; }
+    .price-sub { margin-top: 8px; color: rgba(255,255,255,0.58); line-height: 1.7; font-size: 14px; }
+    .price-list { list-style: none; display: grid; gap: 10px; margin-top: 22px; }
+    .price-list li { padding: 14px 15px; border-radius: 18px; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.10); display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.78); font-size: 14px; }
+    .line-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 12px rgba(122,232,255,0.8); flex-shrink: 0; }
+    .pricing-actions { margin-top: 22px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .screens { display: grid; grid-template-columns: 1.14fr 0.86fr; gap: 16px; margin-top: 22px; }
+    .screenshot-card { overflow: hidden; padding: 18px; }
+    .screen-card-inner { border-radius: 24px; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.10); overflow: hidden; height: 100%; }
+    .screen-copy { padding: 18px 18px 0; }
+    .screen-copy strong { display: block; font-size: 18px; }
+    .screen-copy span { display: block; margin-top: 8px; color: rgba(255,255,255,0.60); line-height: 1.75; font-size: 14px; }
+    .screen-media { padding: 18px; }
+    .screen-media img { width: 100%; height: auto; border-radius: 18px; border: 1px solid rgba(255,255,255,0.10); background: #02050d; }
+    .mini-stack { display: grid; gap: 16px; }
+    .mini-note { padding: 24px; border-radius: 24px; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.10); }
+    .mini-note strong { display: block; font-size: 18px; }
+    .mini-note p { margin-top: 10px; color: rgba(255,255,255,0.62); line-height: 1.75; font-size: 14px; }
+    .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 22px; }
+    .faq-card { padding: 22px; }
+    .faq-card h3 { font-size: 18px; margin-bottom: 10px; }
+    .faq-card p { color: rgba(255,255,255,0.64); line-height: 1.8; font-size: 15px; }
+    .footer-cta { margin-top: 56px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .footer-cta h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; letter-spacing: -0.04em; max-width: 12ch; }
+    .footer-cta p { margin-top: 10px; color: rgba(255,255,255,0.64); line-height: 1.8; max-width: 620px; }
+    .sticky-cta {
+      position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); width: min(760px, calc(100% - 24px)); padding: 12px; border-radius: 24px;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; z-index: 40;
+    }
+    .sticky-copy strong { display: block; font-size: 14px; color: white; }
+    .sticky-copy span { display: block; margin-top: 4px; font-size: 12px; color: rgba(255,255,255,0.54); line-height: 1.5; }
+    .sticky-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    footer { margin-top: 26px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.10); display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; color: rgba(255,255,255,0.44); font-size: 13px; }
+    @keyframes float { 0%,100% { transform: translateY(0) translateX(0) scale(1); } 50% { transform: translateY(22px) translateX(10px) scale(1.04); } }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 1120px) {
+      .hero,.split,.screens { grid-template-columns: 1fr; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 760px) {
+      .container { width: min(var(--max), calc(100% - 18px)); padding-top: 14px; }
+      .navbar { position: static; border-radius: 26px; padding: 14px; }
+      .nav-links { display: none; }
+      .brand img { width: 132px; max-width: 44vw; }
+      .card,.feature-card,.screenshot-card,.pricing-card,.faq-card,.footer-cta,.copy-card { padding: 22px; }
+      .stats,.features,.points,.faq-grid { grid-template-columns: 1fr; }
+      .footer-cta { flex-direction: column; align-items: flex-start; }
+      .sticky-cta { flex-direction: column; align-items: stretch; }
+      .sticky-actions { width: 100%; }
+      .sticky-actions a { flex: 1; }
+      footer { padding-bottom: 98px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orbs"></div>
+  <div class="grid"></div>
+  <div class="noise"></div>
+
+  <div class="container">
+    <header class="navbar glass reveal">
+      <div class="brand">
+        <img src="assets/logo.png" alt="Fortnite Optimizer logo" />
+      </div>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn-ghost" href="https://fortnitelover13.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
+    </header>
+
+    <section class="hero">
+      <div class="card glass-strong reveal delay-1">
+        <div class="eyebrow"><span class="dot"></span>Fortnite setup, minus the extra hassle</div>
+        <h1>Clean up your system and get into the game faster.</h1>
+        <p class="lead">Fortnite Optimizer is built for players who want a simpler way to apply useful tweaks, cut down background clutter, and make their setup feel cleaner without wasting time hunting through Windows settings.</p>
+        <div class="hero-actions">
+          <a class="btn" href="https://fortnitelover13.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
+        </div>
+        <div class="trust-row">
+          <span>Simple to use</span>
+          <span>Clean interface</span>
+          <span>Useful tweaks</span>
+          <span>Made for Fortnite players</span>
+        </div>
+        <div class="stats">
+          <div class="stat glass"><strong>Quick</strong><span>Open it, choose what you want, apply it, and play.</span></div>
+          <div class="stat glass"><strong>Simple</strong><span>No messy setup and no confusing wall of options on the site.</span></div>
+          <div class="stat glass"><strong>Focused</strong><span>Built around a smoother-feeling setup and less unnecessary clutter.</span></div>
+        </div>
+      </div>
+
+      <div class="preview-shell reveal delay-2">
+        <div class="preview-main glass-strong">
+          <div class="preview-window">
+            <div class="preview-top">
+              <div>
+                <strong>What the app looks like</strong>
+                <span>The actual interface your customers will be using</span>
+              </div>
+              <div class="status-pill">Live preview</div>
+            </div>
+            <div class="preview-image-wrap">
+              <div class="preview-image">
+                <img src="assets/app-ui.png" alt="Fortnite Optimizer app interface" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="reveal delay-2">
+      <div class="section-head">
+        <p>Features</p>
+        <h2>Everything people care about, without filler.</h2>
+        <div class="sub">The page keeps the message simple: what it is, why it helps, what it looks like, and how to buy it.</div>
+      </div>
+      <div class="features">
+        <div class="feature-card glass">
+          <div class="icon-box"></div>
+          <h3>Choose the tweaks you want</h3>
+          <p>Players can pick the settings they want to apply instead of being forced into one preset they may not fully trust.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="icon-box"></div>
+          <h3>Cleaner setup</h3>
+          <p>The app is built to feel approachable, so even people who are not deep into Windows tweaking can use it comfortably.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="icon-box"></div>
+          <h3>Faster path to play</h3>
+          <p>Less digging through settings, less manual work, and a more direct path from opening the app to getting back into Fortnite.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="icon-box"></div>
+          <h3>Made around the game</h3>
+          <p>The options are framed around the things Fortnite players actually care about: responsiveness, performance, and keeping things clean.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="split reveal delay-3">
+      <div class="copy-card glass">
+        <div class="section-head">
+          <p>Why it sells</p>
+          <h2>Because it saves time and feels easy to use.</h2>
+          <div class="sub">Most players do not want to follow a long guide, guess which tweaks matter, or manually change everything themselves. They just want a cleaner way to get set up and move on.</div>
+        </div>
+        <div class="points">
+          <div class="point">A clean product page that gets to the point</div>
+          <div class="point">Real screenshot instead of fake dashboards</div>
+          <div class="point">Human wording that feels natural</div>
+          <div class="point">Straight path from interest to checkout</div>
+        </div>
+      </div>
+
+      <div id="pricing" class="pricing-card glass-strong">
+        <div class="section-head">
+          <p>Pricing</p>
+          <h2>Fortnite Optimizer</h2>
+        </div>
+        <div class="price">$19</div>
+        <div class="price-sub">One-time purchase. Instant access. Simple and direct.</div>
+        <ul class="price-list">
+          <li><span class="line-dot"></span>Clean tweak selection interface</li>
+          <li><span class="line-dot"></span>Useful optimization options</li>
+          <li><span class="line-dot"></span>Made for players who want less setup hassle</li>
+          <li><span class="line-dot"></span>Simple path from purchase to use</li>
+        </ul>
+        <div class="pricing-actions">
+          <a class="btn" href="https://fortnitelover13.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenshots" class="reveal delay-3">
+      <div class="section-head">
+        <p>Screenshots</p>
+        <h2>A real look at the app.</h2>
+        <div class="sub">No filler, no fake mockups — just the actual interface people will see.</div>
+      </div>
+      <div class="screens">
+        <div class="screenshot-card glass">
+          <div class="screen-card-inner">
+            <div class="screen-copy">
+              <strong>Main view</strong>
+              <span>People can choose the tweaks they want, apply them, and move on without being buried in clutter.</span>
+            </div>
+            <div class="screen-media">
+              <img src="assets/app-ui.png" alt="Fortnite Optimizer main screen" />
+            </div>
+          </div>
+        </div>
+        <div class="mini-stack">
+          <div class="mini-note glass">
+            <strong>Made to feel straightforward</strong>
+            <p>The layout keeps the important stuff front and center: tweak choices, apply actions, and clear status feedback.</p>
+          </div>
+          <div class="mini-note glass">
+            <strong>Built for players, not tech essays</strong>
+            <p>The website copy stays simple and natural so visitors understand what they are buying without having to read through a wall of jargon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="reveal delay-4">
+      <div class="section-head">
+        <p>FAQ</p>
+        <h2>Things people usually want to know first.</h2>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-card glass">
+          <h3>Who is this for?</h3>
+          <p>It is for Fortnite players who want a cleaner, easier way to apply useful system tweaks without doing everything manually.</p>
+        </div>
+        <div class="faq-card glass">
+          <h3>Is it hard to use?</h3>
+          <p>No. The whole point is to make the process feel simple and approachable, even if someone is not deep into PC tweaking.</p>
+        </div>
+        <div class="faq-card glass">
+          <h3>Do I need to set everything up myself?</h3>
+          <p>No. Players can choose what they want from the interface instead of hunting through Windows one setting at a time.</p>
+        </div>
+        <div class="faq-card glass">
+          <h3>How do I get it after paying?</h3>
+          <p>Right after checkout, customers should be taken straight to the download or receive access through your payment platform automatically.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-cta glass-strong reveal delay-4">
+      <div>
+        <h2>Ready to optimize your Fortnite setup?</h2>
+        <p>Fortnite Optimizer keeps it simple: cleaner setup, useful tweaks, and a straightforward path to getting back into the game.</p>
+      </div>
+      <a class="btn" href="https://fortnitelover13.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
+    </section>
+
+    <footer>
+      <span>© 2026 Fortnite Optimizer</span>
+      <span>Independent utility for PC players</span>
+    </footer>
+  </div>
+
+  <div class="sticky-cta glass-strong">
+    <div class="sticky-copy">
+      <strong>Fortnite Optimizer</strong>
+      <span>Simple tweaks. Cleaner setup. One-time purchase.</span>
+    </div>
+    <div class="sticky-actions">
+      <a class="btn" href="https://fortnitelover13.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
+    </div>
+  </div>
+</body>
+</html>
