@@ -111,25 +111,35 @@
     .points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
     .point { padding: 16px; border-radius: 20px; background: rgba(0,0,0,0.16); border: 1px solid rgba(255,255,255,0.10); color: rgba(255,255,255,0.76); font-size: 14px; }
     .pricing-card h2 { margin-top: 10px; font-size: clamp(30px, 4vw, 40px); letter-spacing: -0.04em; }
+    
 .price {
   margin-top: 24px;
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  align-items: center;
+  gap: 12px;
 }
 
-.price .currency {
-  font-size: 22px;
-  color: rgba(255,255,255,0.72);
+.price .currency-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.78);
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0;
+  letter-spacing: 0.04em;
 }
 
 .price .amount {
   font-size: clamp(52px, 6vw, 70px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
   line-height: 0.95;
+  color: #fff;
 }
     .line-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 12px rgba(122,232,255,0.8); flex-shrink: 0; }
     .pricing-actions { margin-top: 22px; display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -272,40 +282,48 @@
     </section>
 
     <section class="split reveal delay-3">
-      <div class="copy-card glass">
-        <div class="section-head">
-          <p>Why it sells</p>
-          <h2>Because it saves time and feels easy to use.</h2>
-          <div class="sub">Most players do not want to follow a long guide, guess which tweaks matter, or manually change everything themselves. They just want a cleaner way to get set up and move on.</div>
-        </div>
-        <div class="points">
-          <div class="point">A clean product page that gets to the point</div>
-          <div class="point">Real screenshot instead of fake dashboards</div>
-          <div class="point">Human wording that feels natural</div>
-          <div class="point">Straight path from interest to checkout</div>
-        </div>
+  <div class="copy-card glass">
+    <div class="section-head">
+      <p>Why it sells</p>
+      <h2>Because it saves time and feels easy to use.</h2>
+      <div class="sub">
+        Most players do not want to follow a long guide, guess which tweaks matter, or manually change everything themselves. They just want a cleaner way to get set up and move on.
       </div>
+    </div>
 
-      <div id="pricing" class="pricing-card glass-strong">
-        <div class="section-head">
-          <p>Pricing</p>
-          <h2>Fortnite Optimizer</h2>
-        <div class="price">
+    <div class="points">
+      <div class="point">A clean product page that gets to the point</div>
+      <div class="point">Real screenshot instead of fake dashboards</div>
+      <div class="point">Human wording that feels natural</div>
+      <div class="point">Straight path from interest to checkout</div>
+    </div>
+  </div>
+
+  <div id="pricing" class="pricing-card glass-strong">
+    <div class="section-head">
+      <p>Pricing</p>
+      <h2>Fortnite Optimizer</h2>
+    </div>
+
+    <div class="price">
       <span class="currency-pill">AU$</span>
       <span class="amount">19</span>
-        </div>
-        <div class="price-sub">One-time purchase. Instant access. Simple and direct.</div>
-        <ul class="price-list">
-          <li><span class="line-dot"></span>Clean tweak selection interface</li>
-          <li><span class="line-dot"></span>Useful optimization options</li>
-          <li><span class="line-dot"></span>Made for players who want less setup hassle</li>
-          <li><span class="line-dot"></span>Simple path from purchase to use</li>
-        </ul>
-        <div class="pricing-actions">
-          <a class="btn" href="https://rtefortnitetweaks.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
-        </div>
-      </div>
-    </section>
+    </div>
+
+    <div class="price-sub">One-time purchase. Instant access. Simple and direct.</div>
+
+    <ul class="price-list">
+      <li><span class="line-dot"></span>Clean tweak selection interface</li>
+      <li><span class="line-dot"></span>Useful optimization options</li>
+      <li><span class="line-dot"></span>Made for players who want less setup hassle</li>
+      <li><span class="line-dot"></span>Simple path from purchase to use</li>
+    </ul>
+
+    <div class="pricing-actions">
+      <a class="btn" href="https://rtefortnitetweaks.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
+    </div>
+  </div>
+</section>
 
     <section id="screenshots" class="reveal delay-3">
       <div class="section-head">
