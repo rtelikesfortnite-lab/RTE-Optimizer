@@ -112,34 +112,37 @@
     .point { padding: 16px; border-radius: 20px; background: rgba(0,0,0,0.16); border: 1px solid rgba(255,255,255,0.10); color: rgba(255,255,255,0.76); font-size: 14px; }
     .pricing-card h2 { margin-top: 10px; font-size: clamp(30px, 4vw, 40px); letter-spacing: -0.04em; }
     
-.price {
-  margin-top: 24px;
+.price-sub {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  color: rgba(255,255,255,0.58);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.price-list {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.price-list li {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.price .currency-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
   color: rgba(255,255,255,0.78);
   font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  line-height: 1.5;
 }
 
-.price .amount {
-  font-size: clamp(52px, 6vw, 70px);
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 0.95;
-  color: #fff;
+.line-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #7ae8ff;
+  box-shadow: 0 0 12px rgba(122,232,255,0.8);
+  flex-shrink: 0;
 }
     .line-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 12px rgba(122,232,255,0.8); flex-shrink: 0; }
     .pricing-actions { margin-top: 22px; display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -313,11 +316,11 @@
     <div class="price-sub">One-time purchase. Instant access. Simple and direct.</div>
 
     <ul class="price-list">
-      <li><span class="line-dot"></span>Clean tweak selection interface</li>
-      <li><span class="line-dot"></span>Useful optimization options</li>
-      <li><span class="line-dot"></span>Made for players who want less setup hassle</li>
-      <li><span class="line-dot"></span>Simple path from purchase to use</li>
-    </ul>
+  <li><span class="line-dot"></span>Clean tweak selection interface</li>
+  <li><span class="line-dot"></span>Useful optimization options</li>
+  <li><span class="line-dot"></span>Made for players who want less setup hassle</li>
+  <li><span class="line-dot"></span>Simple path from purchase to use</li>
+  </ul>
 
     <div class="pricing-actions">
       <a class="btn" href="https://rtefortnitetweaks.gumroad.com/l/eeueix" target="_blank" rel="noopener noreferrer">Buy now</a>
