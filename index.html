@@ -111,10 +111,26 @@
     .points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
     .point { padding: 16px; border-radius: 20px; background: rgba(0,0,0,0.16); border: 1px solid rgba(255,255,255,0.10); color: rgba(255,255,255,0.76); font-size: 14px; }
     .pricing-card h2 { margin-top: 10px; font-size: clamp(30px, 4vw, 40px); letter-spacing: -0.04em; }
-    .price { margin-top: 24px; font-size: clamp(52px, 6vw, 70px); font-weight: 800; letter-spacing: -0.05em; }
-    .price-sub { margin-top: 8px; color: rgba(255,255,255,0.58); line-height: 1.7; font-size: 14px; }
-    .price-list { list-style: none; display: grid; gap: 10px; margin-top: 22px; }
-    .price-list li { padding: 14px 15px; border-radius: 18px; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.10); display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.78); font-size: 14px; }
+.price {
+  margin-top: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.price .currency {
+  font-size: 22px;
+  color: rgba(255,255,255,0.72);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.price .amount {
+  font-size: clamp(52px, 6vw, 70px);
+  line-height: 0.95;
+}
     .line-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 12px rgba(122,232,255,0.8); flex-shrink: 0; }
     .pricing-actions { margin-top: 22px; display: grid; grid-template-columns: 1fr; gap: 12px; }
     .screens { display: grid; grid-template-columns: 1.14fr 0.86fr; gap: 16px; margin-top: 22px; }
@@ -274,8 +290,10 @@
         <div class="section-head">
           <p>Pricing</p>
           <h2>Fortnite Optimizer</h2>
+        <div class="price">
+      <span class="currency-pill">AU$</span>
+      <span class="amount">19</span>
         </div>
-        <div class="price">A$19</div>
         <div class="price-sub">One-time purchase. Instant access. Simple and direct.</div>
         <ul class="price-list">
           <li><span class="line-dot"></span>Clean tweak selection interface</li>
